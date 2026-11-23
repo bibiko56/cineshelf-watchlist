@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Watchlist — CineShelf</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-left">
+      <a href="dashboard.html" class="logo">CINESHELF</a>
+      <nav class="nav-links">
+        <a href="dashboard.html" class="active">Watchlist</a>
+        <a href="stats.html">Insights & Backup</a>
+        <a href="admin.html" id="nav-admin-link" class="hidden">Admin Panel</a>
+      </nav>
+    </div>
+    <div class="nav-right">
+      <span id="user-greeting" class="user-pill"></span>
+      <button id="logout-btn" class="btn btn-ghost btn-sm">Sign Out</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="page-header">
+      <div>
+        <h1>My Watchlist</h1>
+        <p class="subtitle">Manage movies, shows, episode counters, and spoiler-free takes.</p>
+      </div>
+      <button id="open-modal-btn" class="btn btn-primary">+ Add Title</button>
+    </section>
+
+    <!-- Admin-Curated Featured Picks -->
+    <section id="featured-banner" class="panel" style="margin-bottom: 1.5rem;">
+      <div class="panel-header-row" style="margin-bottom: 0.75rem;">
+        <h2 style="font-size: 0.95rem;">★ Staff & Admin Picks (1-Click Add)</h2>
+      </div>
+      <div id="featured-pills" class="featured-pills"></div>
+    </section>
+
+    <!-- Filter Bar -->
+    <section class="filter-bar">
+      <input type="text" id="search-input" placeholder="Search title, tag, or note..." />
+        <select id="filter-genre">
+        <option value="all">All Genres</option>
+        <option value="Action / Adventure">Action / Adventure</option>
+        <option value="Animation / Anime">Animation / Anime</option>
+        <option value="Comedy">Comedy</option>
+        <option value="Crime / Mystery">Crime / Mystery</option>
+        <option value="Documentary">Documentary</option>
+        <option value="Drama">Drama</option>
+        <option value="Fantasy">Fantasy</option>
+        <option value="Historical">Historical</option>
+        <option value="Horror">Horror</option>
+        <option value="Romance">Romance</option>
+        <option value="Sci-Fi">Sci-Fi</option>
+        <option value="Thriller">Thriller</option>
+      </select>
+
+      <select id="filter-type">
+        <option value="all">All Formats</option>
+        <option value="Movie">Movies</option>
+        <option value="Series">Series</option>
+      </select>
+
+      <select id="filter-status">
+        <option value="all">All Statuses</option>
+        <option value="Plan to Watch">Plan to Watch</option>
+        <option value="Watching">Watching</option>
+        <option value="Completed">Completed</option>
+        <option value="On Hold">On Hold</option>
+      </select>
+
+      <select id="filter-platform">
+        <option value="all">All Platforms</option>
+        <option value="Netflix">Netflix</option>
+        <option value="Prime Video">Prime Video</option>
+        <option value="Disney+">Disney+</option>
+        <option value="Max">Max</option>
+        <option value="Apple TV+">Apple TV+</option>
+        <option value="Theater / Blu-ray">Theater / Blu-ray</option>
+        <option value="Other">Other</option>
+      </select>
+    </section>
+
+    <!-- Watchlist Grid -->
+    <section id="watchlist-grid" class="watchlist-grid"></section>
+  </main>
+
+  <!-- Add / Edit Modal -->
+  <div id="item-modal" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 id="modal-title">Add to Watchlist</h2>
+        <button id="close-modal-btn" class="icon-btn" aria-label="Close">&times;</button>
+      </div>
+
+      <form id="item-form">
+        <input type="hidden" id="item-id" />
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="item-title">Title *</label>
+            <input type="text" id="item-title" placeholder="e.g., Severance" required />
+          </div>
+          <div class="form-group">
+            <label for="item-type">Format *</label>
+            <select id="item-type">
+              <option value="Series">Series</option>
+              <option value="Movie">Movie</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="item-status">Status</label>
+            <select id="item-status">
+              <option value="Plan to Watch">Plan to Watch</option>
+              <option value="Watching">Watching</option>
+              <option value="Completed">Completed</option>
+              <option value="On Hold">On Hold</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="item-platform">Streaming / Watch Tag</label>
+            <select id="item-platform">
+              <option value="Netflix">Netflix</option>
+              <option value="Prime Video">Prime Video</option>
+              <option value="Disney+">Disney+</option>
+              <option value="Max">Max</option>
+              <option value="Apple TV+">Apple TV+</option>
+              <option value="Theater / Blu-ray">Theater / Blu-ray</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Multi-Season Builder (Series Only) -->
+        <div id="series-fields" class="seasons-builder">
+          <div class="seasons-builder-header">
+            <label style="margin: 0;">Seasons & Episode Progress</label>
+            <button type="button" id="add-season-btn" class="btn btn-ghost btn-sm">+ Add Season</button>
+          </div>
+          <div id="seasons-list" class="seasons-list"></div>
+          <p class="subtitle" id="modal-series-summary">Total: 0 / 0 episodes</p>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="item-rating">Star Rating (0–5)</label>
+            <select id="item-rating">
+              <option value="0">Unrated</option>
+              <option value="5">★★★★★ (5/5)</option>
+              <option value="4">★★★★☆ (4/5)</option>
+              <option value="3">★★★☆☆ (3/5)</option>
+              <option value="2">★★☆☆☆ (2/5)</option>
+              <option value="1">★☆☆☆☆ (1/5)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="item-genre">Genre</label>
+            <select id="item-genre">
+              <option value="">Select Genre...</option>
+              <option value="Action / Adventure">Action / Adventure</option>
+              <option value="Animation / Anime">Animation / Anime</option>
+              <option value="Comedy">Comedy</option>
+              <option value="Crime / Mystery">Crime / Mystery</option>
+              <option value="Documentary">Documentary</option>
+              <option value="Drama">Drama</option>
+              <option value="Fantasy">Fantasy</option>
+              <option value="Historical">Historical</option>
+              <option value="Horror">Horror</option>
+              <option value="Romance">Romance</option>
+              <option value="Sci-Fi">Sci-Fi</option>
+              <option value="Thriller">Thriller</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="item-notes">Spoiler-Free Review / Note</label>
+          <textarea id="item-notes" rows="3" maxlength="240" placeholder="Quick thoughts without spoilers (max 240 chars)..."></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" id="cancel-modal-btn" class="btn btn-ghost">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Title</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

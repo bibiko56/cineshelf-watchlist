@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Insights & Backup — CineShelf</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-left">
+      <a href="dashboard.html" class="logo">CINESHELF</a>
+      <nav class="nav-links">
+        <a href="dashboard.html">Watchlist</a>
+        <a href="stats.html" class="active">Insights & Backup</a>
+        <a href="admin.html" id="nav-admin-link" class="hidden">Admin Panel</a>
+      </nav>
+    </div>
+    <div class="nav-right">
+      <span id="user-greeting" class="user-pill"></span>
+      <button id="logout-btn" class="btn btn-ghost btn-sm">Sign Out</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="page-header">
+      <div>
+        <h1>Watch Insights & Data Backup</h1>
+        <p class="subtitle">Your personal viewing breakdown and portable JSON library backup.</p>
+      </div>
+    </section>
+
+    <!-- KPI Cards -->
+    <section class="stats-grid" id="kpi-grid"></section>
+
+    <!-- Breakdown Panels -->
+    <section class="two-col-panels">
+      <div class="panel">
+        <h2>By Watch Status</h2>
+        <div id="status-breakdown" class="breakdown-list"></div>
+      </div>
+
+      <div class="panel">
+        <h2>By Streaming Platform</h2>
+        <div id="platform-breakdown" class="breakdown-list"></div>
+      </div>
+    </section>
+
+    <!-- JSON Backup Section -->
+    <section class="panel backup-panel">
+      <div>
+        <h2>Local Library Backup</h2>
+        <p class="subtitle">Since this app runs statically in your browser, export a JSON copy anytime or restore from a saved file.</p>
+      </div>
+      <div class="backup-actions">
+        <button id="export-btn" class="btn btn-primary">Download Backup (.json)</button>
+        <label class="btn btn-ghost file-label">
+          Import Backup (.json)
+          <input type="file" id="import-input" accept=".json" hidden />
+        </label>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
